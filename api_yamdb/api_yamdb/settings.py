@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core.apps.CoreConfig',
     'reviews.apps.ReviewsConfig'
 ]
 
@@ -102,3 +103,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+
+BIG_LENGTH_INTEGER:int = 256
+MIDDLE_LENGTH_INTEGER:int = 200
+SMALL_LENGTH_INTEGER:int = 50
+EMAIL_LENGTH: int = 254
