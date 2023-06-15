@@ -118,3 +118,32 @@ class Review(models.Model):
     
     def __str__(self):
         return self.text[:NUM_OF_SYMBOLS]
+
+
+class Comment(models.Model):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    time_of_creation = models.DateTimeField(
+        verbose_name='Время публикации комментария',
+        auto_now_add=True
+    )
+    text = models.TextField(
+        verbose_name='Текст комментария',
+        help_text='Введите текст комментария'
+    )
+
+    class Meta:
+        ordering = ['time_of_creation']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return self.text
