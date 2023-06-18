@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
@@ -17,7 +18,7 @@ from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
                           SelfUserOnly)
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, 
                           SignUpSerializer, TokenSerializer, AdminOrModeratorSerializer, 
-                          UsersSerializer)
+                          UsersSerializer, TitleReadOnlySerializer)
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
 
@@ -28,6 +29,7 @@ class CategoryViewSet(mixins.ListModelMixin,
                       viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = PageNumberPagination
     permission_classes = (IsSuperuserOrAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name",)
@@ -40,6 +42,7 @@ class GenreViewSet(mixins.ListModelMixin,
                    viewsets.GenericViewSet, ):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    pagination_class = PageNumberPagination
     permission_classes = (IsSuperuserOrAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name",)
@@ -48,10 +51,15 @@ class GenreViewSet(mixins.ListModelMixin,
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
     permission_classes = (IsSuperuserOrAdminOrReadOnly,)
-    filter_backends = [DjangoFilterBackend]
+    pagination_class = PageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
+    
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return TitleReadOnlySerializer
+        return TitleSerializer
 
 
 class SignUpViewSet(APIView):
