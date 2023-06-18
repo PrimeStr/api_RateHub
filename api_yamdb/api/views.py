@@ -18,8 +18,8 @@ from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, 
                           SignUpSerializer, TokenSerializer, AdminOrModeratorSerializer, 
                           UsersSerializer)
-from ..reviews.models import Category, Genre, Title, Review, Comment
-from ..users.models import User
+from reviews.models import Category, Genre, Title, Review, Comment
+from users.models import User
 
 
 class CategoryViewSet(mixins.ListModelMixin,
