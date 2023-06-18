@@ -13,7 +13,7 @@ class SelfUserOnly(permissions.BasePermission):
         return (request.user.is_authenticated)
 
     def has_object_permission(self, request, view, obj):
-        return (obj.id == request.user)
+        return (obj.author == request.user)
 
 
 class IsAuthorModeratorAdminOrReadOnly(permissions.BasePermission):

@@ -11,7 +11,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api_yamdb.settings import EMAIL_HOST
-from users.models import User
 
 from .filters import TitleFilter
 from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
@@ -19,7 +18,8 @@ from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, 
                           SignUpSerializer, TokenSerializer, AdminOrModeratorSerializer, 
                           UsersSerializer)
-from reviews.models import Category, Genre, Title, Review, Comment
+from ..reviews.models import Category, Genre, Title, Review, Comment
+from ..users.models import User
 
 
 class CategoryViewSet(mixins.ListModelMixin,
