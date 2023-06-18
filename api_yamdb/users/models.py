@@ -11,7 +11,7 @@ class User(AbstractUser):
     USER = 'user'
     ADMIN = 'admin'
     MODERATOR = 'moderator'
-
+    
     ROLES = (
         (USER, USER),
         (ADMIN, ADMIN),
@@ -59,7 +59,7 @@ class User(AbstractUser):
         unique=True,
         editable=False
     )
-
+    
     @property
     def is_admin(self):
         return self.role == self.ADMIN
@@ -67,11 +67,11 @@ class User(AbstractUser):
     @property
     def is_moderator(self):
         return self.role == self.MODERATOR
-
+    
     class Meta:
         ordering = ('id',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-
+    
     def __str__(self):
         return self.username
