@@ -79,7 +79,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(
         required=True,
-        validators=[UnicodeUsernameValidator, ]
+        validators=(UnicodeUsernameValidator,)
     )
     confirmation_code = serializers.CharField(required=True)
     

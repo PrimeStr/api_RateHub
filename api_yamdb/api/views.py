@@ -15,11 +15,12 @@ from api_yamdb.settings import EMAIL_HOST
 
 from .filters import TitleFilter
 from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
-                          SelfUserOnly)
+                          SelfUserOnly, IsAuthorModeratorAdminOrReadOnly)
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer, 
                           SignUpSerializer, TokenSerializer, AdminOrModeratorSerializer, 
-                          UsersSerializer, TitleReadOnlySerializer)
-from reviews.models import Category, Genre, Title, Review, Comment
+                          UsersSerializer, TitleReadOnlySerializer, ReviewSerializer,
+                          CommentSerializer)
+from reviews.models import Category, Genre, Title, Review
 from users.models import User
 
 
@@ -136,3 +137,29 @@ class UsersViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=HTTP_200_OK)
+
+
+class ReviewViewSet(ModelViewSet):
+    serializer_class = ReviewSerializer
+    permission_classes = (IsAuthorModeratorAdminOrReadOnly,)
+
+    def get_queryset(self):
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        return title.reviews.all()
+
+    def perform_create(self, serializer):
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        serializer.save(author=self.request.user, title=title) 
+
+
+class CommentViewSet(ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthorModeratorAdminOrReadOnly,)
+
+    def get_queryset(self):
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
+        return review.comments.all()
+
+    def perform_create(self, serializer):
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
+        serializer.save(author=self.request.user, review=review)
