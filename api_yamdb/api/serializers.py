@@ -1,6 +1,8 @@
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from rest_framework import serializers
 
 from ..reviews.models import Category, Genre, Title, Review, Comment
+from users.models import User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -26,3 +28,38 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = '__all__'
+
+
+class AdminOrModeratorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
+        )
+
+
+class UsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
+        )
+        read_only_fields = ('role',)
+
+
+class SignUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'username')
+
+
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        required=True, 
+        validators=[UnicodeUsernameValidator, ]
+    )
+    confirmation_code = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'confirmation_code')
