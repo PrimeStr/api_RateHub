@@ -1,8 +1,8 @@
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.db.models import Avg
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from reviews.models import Category, Genre, Title
+from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
 
 
@@ -43,12 +43,12 @@ class TitleReadOnlySerializer(serializers.ModelSerializer):
     
     def get_rating(self, obj):
         reviews = obj.reviews.all()
-        scores = []
+        list_score = []
         for review in reviews:
             if review.score != None:
-                scores.append(review.score)
-        if scores:
-            return Avg(scores)
+                list_score.append(review.score)
+        if list_score:
+            return round(sum(list_score) / len(list_score), 1)
         return None
 
 
@@ -85,3 +85,46 @@ class TokenSerializer(serializers.Serializer):
     class Meta:
         model = User
         fields = ('username', 'confirmation_code')
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    title = TitleReadOnlySerializer(many=False, read_only=True)
+    author = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
+    
+    def validate(self, data):
+        request = self.context['request']
+        author = request.user
+        title_id = self.context['view'].kwargs.get('title_id')
+        title = get_object_or_404(Title, id=title_id)
+        if request.method == 'POST':
+            if Review.objects.filter(author=author, title=title):
+                raise serializers.ValidationError(
+                    'Мoжно оставить только 1 отзыв.'
+                )
+        return data
+    
+    def validate_score(self, value_score):
+        if value_score < 1 or value_score > 10:
+            raise ValueError('Оценка может быть только от 1 до 10.')
+        return value_score
+    
+    class Meta:
+        model = Review
+        fields = '__all__'
+        read_only_fields = ('title',)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    review = ReviewSerializer(many=False, read_only=True)
+    author = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
+    
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        read_only_fields = ('review',)

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+
 User = get_user_model()
 NUM_OF_SYMBOLS = 15
 MIN_VALUE_SCORE = 1
@@ -19,11 +20,11 @@ class Category(models.Model):
         max_length=settings.SMALL_LENGTH_INTEGER,
         unique=True
     )
-
+    
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
-
+    
     def __str__(self):
         return self.name
 
@@ -38,11 +39,11 @@ class Genre(models.Model):
         max_length=settings.SMALL_LENGTH_INTEGER,
         unique=True
     )
-
+    
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
-
+    
     def __str__(self):
         return self.name
 
@@ -71,11 +72,11 @@ class Title(models.Model):
         related_name='titles',
         null=True
     )
-
+    
     class Meta:
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
-
+    
     def __str__(self):
         return self.name
 
@@ -105,7 +106,7 @@ class Review(models.Model):
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
-
+    
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -131,7 +132,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    time_of_creation = models.DateTimeField(
+    pub_date = models.DateTimeField(
         verbose_name='Время публикации комментария',
         auto_now_add=True
     )
@@ -139,11 +140,11 @@ class Comment(models.Model):
         verbose_name='Текст комментария',
         help_text='Введите текст комментария'
     )
-
+    
     class Meta:
-        ordering = ['time_of_creation']
+        ordering = ['pub_date']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
-
+    
     def __str__(self):
         return self.text

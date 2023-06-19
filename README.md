@@ -62,7 +62,7 @@
     pip install -r requirements.txt
     ```
 
-6. Перейти в папку yatube_api и выполнить миграции на уровне проекта:
+6. Перейти в папку api_yamdb и выполнить миграции на уровне проекта:
 
    ```python
    cd yatube_api
