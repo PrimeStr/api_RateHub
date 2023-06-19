@@ -93,7 +93,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True
     )
-
+    
     def validate(self, data):
         request = self.context['request']
         author = request.user
@@ -105,12 +105,12 @@ class ReviewSerializer(serializers.ModelSerializer):
                     'Мoжно оставить только 1 отзыв.'
                 )
         return data
-
+    
     def validate_score(self, value_score):
         if value_score < 1 or value_score > 10:
             raise ValueError('Оценка может быть только от 1 до 10.')
         return value_score
-
+    
     class Meta:
         model = Review
         fields = '__all__'
@@ -123,7 +123,7 @@ class CommentSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True
     )
-
+    
     class Meta:
         model = Comment
         fields = '__all__'
