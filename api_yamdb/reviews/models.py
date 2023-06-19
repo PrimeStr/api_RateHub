@@ -131,7 +131,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    time_of_creation = models.DateTimeField(
+    pub_date = models.DateTimeField(
         verbose_name='Время публикации комментария',
         auto_now_add=True
     )
@@ -141,7 +141,7 @@ class Comment(models.Model):
     )
 
     class Meta:
-        ordering = ['time_of_creation']
+        ordering = ['pub_date']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
