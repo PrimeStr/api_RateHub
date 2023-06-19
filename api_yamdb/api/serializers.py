@@ -44,12 +44,12 @@ class TitleReadOnlySerializer(serializers.ModelSerializer):
     
     def get_rating(self, obj):
         reviews = obj.reviews.all()
-        scores = []
+        list_score = []
         for review in reviews:
             if review.score != None:
-                scores.append(review.score)
-        if scores:
-            return Avg(scores)
+                list_score.append(review.score)
+        if list_score:
+            return round(sum(list_score) / len(list_score), 1)
         return None
 
 
@@ -88,7 +88,7 @@ class TokenSerializer(serializers.Serializer):
         fields = ('username', 'confirmation_code')
 
 
-class ReviewSerializer(serializers.Serializer):
+class ReviewSerializer(serializers.ModelSerializer):
     title = TitleReadOnlySerializer(many=False, read_only=True)
     author = serializers.SlugRelatedField(
         slug_field='username',
@@ -118,7 +118,7 @@ class ReviewSerializer(serializers.Serializer):
         read_only_fields = ('title',)
 
 
-class CommentSerializer(serializers.Serializer):
+class CommentSerializer(serializers.ModelSerializer):
     review = ReviewSerializer(many=False, read_only=True)
     author = serializers.SlugRelatedField(
         slug_field='username',
