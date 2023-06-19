@@ -1,7 +1,7 @@
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db.models import Avg
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.relations import SlugRelatedField
 
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
@@ -89,10 +89,28 @@ class TokenSerializer(serializers.Serializer):
 
 
 class ReviewSerializer(serializers.Serializer):
-    author = SlugRelatedField(
+    title = TitleReadOnlySerializer(many=False, read_only=True)
+    author = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True
     )
+
+    def validate(self, data):
+        request = self.context['request']
+        author = request.user
+        title_id = self.context['view'].kwargs.get('title_id')
+        title = get_object_or_404(Title, id=title_id)
+        if request.method == 'POST':
+            if Review.objects.filter(author=author, title=title):
+                raise serializers.ValidationError(
+                    'Мoжно оставить только 1 отзыв.'
+                )
+        return data
+
+    def validate_score(self, value_score):
+        if value_score < 1 or value_score > 10:
+            raise ValueError('Оценка может быть только от 1 до 10.')
+        return value_score
 
     class Meta:
         model = Review
@@ -101,7 +119,8 @@ class ReviewSerializer(serializers.Serializer):
 
 
 class CommentSerializer(serializers.Serializer):
-    author = SlugRelatedField(
+    review = ReviewSerializer(many=False, read_only=True)
+    author = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True
     )
