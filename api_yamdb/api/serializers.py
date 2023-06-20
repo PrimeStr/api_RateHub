@@ -45,7 +45,7 @@ class TitleReadOnlySerializer(serializers.ModelSerializer):
         reviews = obj.reviews.all()
         list_score = []
         for review in reviews:
-            if review.score != None:
+            if review.score is not None:
                 list_score.append(review.score)
         if list_score:
             return round(sum(list_score) / len(list_score), 1)
