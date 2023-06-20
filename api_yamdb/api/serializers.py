@@ -26,7 +26,7 @@ class TitleSerializer(serializers.ModelSerializer):
         slug_field='slug', many=True, queryset=Genre.objects.all(),
     )
     rating = serializers.IntegerField(required=False)
-    
+
     class Meta:
         model = Title
         fields = '__all__'
@@ -36,11 +36,11 @@ class TitleReadOnlySerializer(serializers.ModelSerializer):
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
     rating = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Title
         fields = '__all__'
-    
+
     def get_rating(self, obj):
         reviews = obj.reviews.all()
         list_score = []
@@ -81,7 +81,7 @@ class TokenSerializer(serializers.Serializer):
         validators=[UnicodeUsernameValidator, ]
     )
     confirmation_code = serializers.CharField(required=True)
-    
+
     class Meta:
         model = User
         fields = ('username', 'confirmation_code')
@@ -93,7 +93,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True
     )
-    
+
     def validate(self, data):
         request = self.context['request']
         author = request.user
@@ -105,12 +105,12 @@ class ReviewSerializer(serializers.ModelSerializer):
                     'Мoжно оставить только 1 отзыв.'
                 )
         return data
-    
+
     def validate_score(self, value_score):
         if value_score < 1 or value_score > 10:
             raise ValueError('Оценка может быть только от 1 до 10.')
         return value_score
-    
+
     class Meta:
         model = Review
         fields = '__all__'
@@ -123,7 +123,7 @@ class CommentSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True
     )
-    
+
     class Meta:
         model = Comment
         fields = '__all__'
