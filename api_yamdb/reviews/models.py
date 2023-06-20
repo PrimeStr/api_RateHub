@@ -20,11 +20,11 @@ class Category(models.Model):
         max_length=settings.SMALL_LENGTH_INTEGER,
         unique=True
     )
-    
+
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
-    
+
     def __str__(self):
         return self.name
 
@@ -39,11 +39,11 @@ class Genre(models.Model):
         max_length=settings.SMALL_LENGTH_INTEGER,
         unique=True
     )
-    
+
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
-    
+
     def __str__(self):
         return self.name
 
@@ -72,11 +72,11 @@ class Title(models.Model):
         related_name='titles',
         null=True
     )
-    
+
     class Meta:
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
-    
+
     def __str__(self):
         return self.name
 
@@ -100,13 +100,14 @@ class Review(models.Model):
     score = models.IntegerField(
         verbose_name='Оценка',
         help_text='Оцените произведение от 1 до 10',
-        validators=[MinValueValidator(MIN_VALUE_SCORE), MaxValueValidator(MAX_VALUE_SCORE)]
+        validators=[MinValueValidator(MIN_VALUE_SCORE),
+                    MaxValueValidator(MAX_VALUE_SCORE)]
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
-    
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -116,7 +117,7 @@ class Review(models.Model):
         ordering = ['-pub_date']
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
-    
+
     def __str__(self):
         return self.text[:NUM_OF_SYMBOLS]
 
@@ -140,11 +141,11 @@ class Comment(models.Model):
         verbose_name='Текст комментария',
         help_text='Введите текст комментария'
     )
-    
+
     class Meta:
         ordering = ['pub_date']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
-    
+
     def __str__(self):
         return self.text

@@ -17,8 +17,9 @@ from .filters import TitleFilter
 from .permissions import (IsSuperuserOrAdminOrReadOnly, IsAdminOnly,
                           SelfUserOnly, IsAuthorModeratorAdminOrReadOnly)
 from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer,
-                          SignUpSerializer, TokenSerializer, AdminOrModeratorSerializer,
-                          UsersSerializer, TitleReadOnlySerializer, ReviewSerializer,
+                          SignUpSerializer, TokenSerializer,
+                          AdminOrModeratorSerializer, UsersSerializer,
+                          TitleReadOnlySerializer, ReviewSerializer,
                           CommentSerializer)
 from reviews.models import Category, Genre, Title, Review
 from users.models import User
@@ -56,7 +57,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
-    
+
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
             return TitleReadOnlySerializer
@@ -65,7 +66,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 class SignUpViewSet(APIView):
     permission_classes = (AllowAny,)
-    
+
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
         if (User.objects.filter(username=request.data.get('username'),
@@ -116,7 +117,7 @@ class UsersViewSet(ModelViewSet):
     search_fields = ('username',)
     permission_classes = (IsAdminOnly,)
     http_method_names = ('get', 'post', 'patch', 'delete')
-    
+
     @action(
         methods=['get', 'patch'], detail=False,
         url_path='me', permission_classes=(SelfUserOnly,)
@@ -128,7 +129,7 @@ class UsersViewSet(ModelViewSet):
             )
             serializer = self.get_serializer(user)
             return Response(serializer.data)
-        
+
         user = get_object_or_404(
             User, username=request.user
         )
@@ -141,7 +142,7 @@ class UsersViewSet(ModelViewSet):
 class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = (IsAuthorModeratorAdminOrReadOnly,)
-    
+
     def get_queryset(self):
         title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
         return title.reviews.all()
@@ -154,11 +155,11 @@ class ReviewViewSet(ModelViewSet):
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthorModeratorAdminOrReadOnly,)
-    
+
     def get_queryset(self):
         review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
         return review.comments.all().order_by('id')
-    
+
     def perform_create(self, serializer):
         review = get_object_or_404(
             Review,
