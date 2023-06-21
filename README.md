@@ -23,66 +23,71 @@
 ###
 1. Клонировать репозиторий:
 
-    ```python
-    git clone https://github.com/PrimeStr/api_yamdb.git
-    ```
+```shell
+git clone https://github.com/PrimeStr/api_yamdb.git
+```
 
 2. Перейти в папку с проектом:
 
-    ```python
-    cd api_yamdb/
-    ```
+```shell
+cd api_yamdb/
+```
 
 3. Установить виртуальное окружение для проекта:
 
-    ```python
-    # для OS Linux и MacOS
-    python3 -m venv venv
-
-    # для OS Windows
-    python -m venv venv
-    ```
+>###### Если у вас OS Linux и MacOS
+>```shell
+>python3 -m venv venv
+>```
+>###### Если у вас OS Windows
+>```shell
+>python -m venv venv
+>```
 
 4. Активировать виртуальное окружение для проекта:
 
-    ```python
-    # *source* можно заменить на .
-   
-    # для OS Linux и MacOS
-    source venv/bin/activate
 
-    # для OS Windows
-    source venv/Scripts/activate
-    ```
-
-
+>#### `source` можно заменить на .
+>   
+>###### Если у вас OS Linux и MacOS
+>```shell
+>source venv/bin/activate
+>```
+>###### Если у вас OS Windows
+>```shell
+>source venv/Scripts/activate
+>```
 5. Установить зависимости:
 
-    ```python
-    pip install -r requirements.txt
-    ```
+```shell
+pip install -r requirements.txt
+```
 
 6. Перейти в папку api_yamdb и выполнить миграции на уровне проекта:
 
-   ```python
-   cd yatube_api
-   
-   # для OS Linux и MacOS
-    python3 manage.py migrate
-
-    # для OS Windows
-    python manage.py migrate
-   ```
+```shell
+cd api_yamdb/
+```
+>###### Если у вас OS Linux и MacOS
+>```shell
+>python3 manage.py migrate
+>```
+>###### Если у вас OS Windows
+>```shell
+>python manage.py migrate
+>```
 
 
 7. Запустить проект локально:
 
-   ```python
-   # для OS Linux и MacOS
-    python3 manage.py runserver
-   
-   # для OS Windows
-    python manage.py runserver
+>###### Если у вас OS Linux и MacOS
+>```shell
+>python3 manage.py runserver
+>```
+>###### Если у вас OS Windows
+>```shell
+>python manage.py runserver
+>```
 
 ## Примеры запросов
 
@@ -92,10 +97,10 @@
 : Отправить POST-запрос на эндпоинт `'/auth/signup/'` и передать в нём 2 поля:
 
 ```json
-  {
-      "email": "Ваша эл.почта",
-      "username": "Ваше имя пользователя"
-  }
+{
+   "email": "Ваша эл.почта",
+   "username": "Ваше имя пользователя"
+}
 ```
 
 Получение токена
@@ -103,10 +108,10 @@
 : Отправить POST-запрос на эндпоинт `'/auth/token/'` и передать в нём 2 поля:
 
 ```json
-  {
-      "username": "Ваше имя пользователя",
-      "confirmation_code": "Ваш код подтверждения с эл.почты"
-  }
+{
+   "username": "Ваше имя пользователя",
+   "confirmation_code": "Ваш код подтверждения с эл.почты"
+}
 ```
 
 В ответе от API в поле`"token"`вы получите токен. Сохраните его.
@@ -118,27 +123,27 @@
 
 Пример ответа:
 
-   ```json
-   {
-    "count": 3,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "name": "Фильм",
-            "slug": "movie"
-        },
-        {
-            "name": "Книга",
-            "slug": "book"
-        },
-        {
-            "name": "Музыка",
-            "slug": "music"
-        }
-    ]
+```json
+{
+   "count": 3,
+   "next": null,
+   "previous": null,
+   "results": [
+      {
+         "name": "Фильм",
+         "slug": "movie"
+      },
+      {
+         "name": "Книга",
+         "slug": "book"
+      },
+      {
+         "name": "Музыка",
+         "slug": "music"
+      }
+   ]
 }
-   ```
+```
 
 
 
@@ -153,4 +158,4 @@
 #### Для создания и тестирования API использовался [Postman](https://www.postman.com/).
 
 ## Выражаю свою благодарность коллегам, с которыми мы разделили создание этого проекта. 
-### Спасибо вам, [Никита Станишевский](https://github.com/NikitaStanish) , [Александр Кашигин](https://github.com/Alexander-Kashigin) !
+### Авторы: [Никита Станишевский](https://github.com/NikitaStanish) , [Александр Кашигин](https://github.com/Alexander-Kashigin), [Максим Головин](https://github.com/PrimeStr)
