@@ -18,8 +18,10 @@ if check_debug == 'True':
 elif check_debug == 'False':
     DEBUG = False
 else:
-    raise Exception('DEBUG in .env is not True or False. '
-                    'Check the entered data in the .env file!')
+    DEBUG = True
+    print('DEBUG in .env is not True or False. '
+          'Check the entered data in the .env file! '
+          'It\'s True for now. You need to change it.')
 
 ALLOWED_HOSTS = []
 if not DEBUG:
