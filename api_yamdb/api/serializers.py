@@ -2,8 +2,10 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from api_yamdb.settings import EMAIL_LENGTH
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
+from users.validators import validate_username
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -69,7 +71,11 @@ class UsersSerializer(serializers.ModelSerializer):
         read_only_fields = ('role',)
 
 
-class SignUpSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True,
+                                     validators=(validate_username,))
+    email = serializers.EmailField(required=True, max_length=EMAIL_LENGTH)
+
     class Meta:
         model = User
         fields = ('email', 'username')

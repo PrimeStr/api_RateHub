@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
@@ -69,13 +70,11 @@ class SignUpViewSet(APIView):
 
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
-        if (User.objects.filter(username=request.data.get('username'),
-                                email=request.data.get('email'))):
-            user = User.objects.get(username=request.data.get('username'))
-            serializer = SignUpSerializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user = User.objects.get(username=request.data.get('username'))
+        try:
+            user, _ = User.objects.get_or_create(**serializer.validated_data)
+        except IntegrityError:
+            return Response(request.data, status=HTTP_400_BAD_REQUEST)
         send_mail(
             subject='Код подтверждения',
             message=(f'Ваш confirmation_code: {user.confirmation_code}'),
