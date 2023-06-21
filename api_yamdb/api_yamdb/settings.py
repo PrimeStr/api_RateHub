@@ -18,7 +18,7 @@ if check_debug == 'True':
 elif check_debug == 'False':
     DEBUG = False
 else:
-    raise Exception('DEBUG in .env is not True or False.'
+    raise Exception('DEBUG in .env is not True or False. '
                     'Check the entered data in the .env file!')
 
 ALLOWED_HOSTS = []

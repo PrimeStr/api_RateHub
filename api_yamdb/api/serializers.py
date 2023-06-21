@@ -20,7 +20,7 @@ class GenreSerializer(serializers.ModelSerializer):
         exclude = ('id',)
 
 
-class TitleSerializer(serializers.ModelSerializer):
+class TitleCreateUpdateDestroySerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
         slug_field='slug', queryset=Category.objects.all(),
     )
@@ -37,21 +37,11 @@ class TitleSerializer(serializers.ModelSerializer):
 class TitleReadOnlySerializer(serializers.ModelSerializer):
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
-    rating = serializers.SerializerMethodField()
+    rating = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Title
         fields = '__all__'
-
-    def get_rating(self, obj):
-        reviews = obj.reviews.all()
-        list_score = []
-        for review in reviews:
-            if review.score is not None:
-                list_score.append(review.score)
-        if list_score:
-            return round(sum(list_score) / len(list_score), 1)
-        return None
 
 
 class AdminOrModeratorSerializer(serializers.ModelSerializer):
