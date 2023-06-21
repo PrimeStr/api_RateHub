@@ -2,8 +2,10 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from api_yamdb.settings import EMAIL_LENGTH
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
+from users.validators import validate_username
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -18,7 +20,7 @@ class GenreSerializer(serializers.ModelSerializer):
         exclude = ('id',)
 
 
-class TitleSerializer(serializers.ModelSerializer):
+class TitleCreateUpdateDestroySerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
         slug_field='slug', queryset=Category.objects.all(),
     )
@@ -35,21 +37,11 @@ class TitleSerializer(serializers.ModelSerializer):
 class TitleReadOnlySerializer(serializers.ModelSerializer):
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
-    rating = serializers.SerializerMethodField()
+    rating = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Title
         fields = '__all__'
-
-    def get_rating(self, obj):
-        reviews = obj.reviews.all()
-        list_score = []
-        for review in reviews:
-            if review.score is not None:
-                list_score.append(review.score)
-        if list_score:
-            return round(sum(list_score) / len(list_score), 1)
-        return None
 
 
 class AdminOrModeratorSerializer(serializers.ModelSerializer):
@@ -69,7 +61,11 @@ class UsersSerializer(serializers.ModelSerializer):
         read_only_fields = ('role',)
 
 
-class SignUpSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True,
+                                     validators=(validate_username,))
+    email = serializers.EmailField(required=True, max_length=EMAIL_LENGTH)
+
     class Meta:
         model = User
         fields = ('email', 'username')
@@ -105,11 +101,6 @@ class ReviewSerializer(serializers.ModelSerializer):
                     'Мoжно оставить только 1 отзыв.'
                 )
         return data
-
-    def validate_score(self, value_score):
-        if value_score < 1 or value_score > 10:
-            raise ValueError('Оценка может быть только от 1 до 10.')
-        return value_score
 
     class Meta:
         model = Review

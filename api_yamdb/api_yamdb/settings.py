@@ -11,9 +11,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default=get_random_secret_key())
 
-DEBUG = os.getenv('DEBUG')
+check_debug = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+if check_debug == 'True':
+    DEBUG = True
+elif check_debug == 'False':
+    DEBUG = False
+else:
+    raise Exception('DEBUG in .env is not True or False. '
+                    'Check the entered data in the .env file!')
+
+ALLOWED_HOSTS = []
+if not DEBUG:
+    ALLOWED_HOSTS += [os.getenv('ALLOWED_HOSTS')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,7 +35,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
-    'core.apps.CoreConfig',
     'reviews.apps.ReviewsConfig',
     'users.apps.UsersConfig',
     'import_export',
