@@ -1,12 +1,11 @@
 from django.core.mail import send_mail
-from django.db import IntegrityError
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -74,10 +73,7 @@ class SignUpViewSet(APIView):
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            user, _ = User.objects.get_or_create(**serializer.validated_data)
-        except IntegrityError:
-            return Response(request.data, status=HTTP_400_BAD_REQUEST)
+        user, _ = User.objects.get_or_create(**serializer.validated_data)
         send_mail(
             subject='Код подтверждения',
             message=(f'Ваш confirmation_code: {user.confirmation_code}'),
@@ -117,7 +113,7 @@ class UsersViewSet(ModelViewSet):
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
-    permission_classes = (IsAdminOnly,)
+    permission_classes = (IsAuthenticated, IsAdminOnly)
     http_method_names = ('get', 'post', 'patch', 'delete')
 
     @action(
