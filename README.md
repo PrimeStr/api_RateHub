@@ -55,7 +55,7 @@ cd api_yamdb/
 >```
 >###### Если у вас OS Windows и вы используете cmd или PowerShell
 >```shell
->source venv\Scripts\activate.ps1
+>.\venv\Scripts\activate.ps1
 >```
 >###### Если у вас OS Windows и вы используете Bash
 >```shell
