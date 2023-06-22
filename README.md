@@ -53,7 +53,11 @@ cd api_yamdb/
 >```shell
 >source venv/bin/activate
 >```
->###### Если у вас OS Windows
+>###### Если у вас OS Windows и вы используете cmd или PowerShell
+>```shell
+>source venv\Scripts\activate.ps1
+>```
+>###### Если у вас OS Windows и вы используете Bash
 >```shell
 >source venv/Scripts/activate
 >```

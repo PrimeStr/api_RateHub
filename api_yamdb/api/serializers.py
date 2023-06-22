@@ -66,6 +66,20 @@ class SignUpSerializer(serializers.Serializer):
                                      validators=(validate_username,))
     email = serializers.EmailField(required=True, max_length=EMAIL_LENGTH)
 
+    def validate(self, data):
+        if User.objects.filter(username=data.get('username'),
+                               email=data.get('email')):
+            return data
+        if User.objects.filter(username=data.get('username')):
+            raise serializers.ValidationError(
+                'Пользователь с таким username уже существует'
+            )
+        if User.objects.filter(email=data.get('email')):
+            raise serializers.ValidationError(
+                'Пользователь с таким email уже существует'
+            )
+        return data
+
     class Meta:
         model = User
         fields = ('email', 'username')
