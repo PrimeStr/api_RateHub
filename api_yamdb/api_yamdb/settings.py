@@ -9,23 +9,11 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
-check_debug = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-if check_debug == 'True':
-    DEBUG = True
-elif check_debug == 'False':
-    DEBUG = False
-else:
-    DEBUG = True
-    print('DEBUG in .env is not True or False. '
-          'Check the entered data in the .env file! '
-          'It\'s True for now. You need to change it.')
-
-ALLOWED_HOSTS = []
-if not DEBUG:
-    ALLOWED_HOSTS += [os.getenv('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
