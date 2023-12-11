@@ -12,7 +12,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from api_yamdb.settings import EMAIL_HOST
+from api_RateHub.settings import EMAIL_HOST
 from reviews.models import Category, Genre, Title, Review
 from users.models import User
 

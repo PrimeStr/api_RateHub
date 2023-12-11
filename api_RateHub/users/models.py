@@ -3,7 +3,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from api_yamdb.settings import EMAIL_LENGTH, NAME_LENGTH, SMALL_LENGTH_INTEGER
+from api_RateHub.settings import EMAIL_LENGTH, NAME_LENGTH, SMALL_LENGTH_INTEGER
 
 from .validators import validate_username
 

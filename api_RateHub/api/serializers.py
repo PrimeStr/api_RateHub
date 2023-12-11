@@ -2,7 +2,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from api_yamdb.settings import EMAIL_LENGTH
+from api_RateHub.settings import EMAIL_LENGTH
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.models import User
 from users.validators import validate_username

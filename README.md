@@ -1,4 +1,4 @@
-# Проект YaMDb
+# Проект RateHub
 
 [![Python](https://img.shields.io/badge/Python-%203.9-blue?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-%203.2-blue?style=flat-square&logo=django)](https://www.djangoproject.com/)
@@ -7,11 +7,11 @@
 
 ## Описание
 
-Яндекс Практикум. Спринт №10. Итоговый проект. API YaMDb.
+API RateHub.
 
 ## Функционал
 
-- Проект YaMDb собирает отзывы пользователей на произведения. Сами произведения в YaMDb не хранятся, здесь нельзя посмотреть фильм или послушать музыку;
+- Проект RateHub собирает отзывы пользователей на произведения. Сами произведения в RateHub не хранятся, здесь нельзя посмотреть фильм или послушать музыку;
 - Произведения делятся на категории, такие как «Книги», «Фильмы», «Музыка» и т.д.;
 - Произведению может быть присвоен жанр из списка предустановленных (например, «Сказка», «Рок» или «Артхаус»);
 - Добавлять произведения, категории и жанры может только администратор;
@@ -24,13 +24,13 @@
 1. Клонировать репозиторий:
 
 ```shell
-git clone https://github.com/PrimeStr/api_yamdb.git
+git clone https://github.com/PrimeStr/api_RateHub.git
 ```
 
 2. Перейти в папку с проектом:
 
 ```shell
-cd api_yamdb/
+cd api_RateHub/
 ```
 
 3. Установить виртуальное окружение для проекта:
@@ -67,10 +67,10 @@ cd api_yamdb/
 pip install -r requirements.txt
 ```
 
-6. Перейти в папку api_yamdb и выполнить миграции на уровне проекта:
+6. Перейти в папку api_RateHub и выполнить миграции на уровне проекта:
 
 ```shell
-cd api_yamdb/
+cd api_RateHub/
 ```
 >###### Если у вас OS Linux и MacOS
 >```shell
@@ -149,10 +149,7 @@ cd api_yamdb/
 }
 ```
 
-
-
 ## Ресурсы
-
 
 #### Документацию проекта вы можете найти по адресу:
     http://127.0.0.1:8000/redoc/
